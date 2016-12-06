@@ -315,6 +315,13 @@ JNIEnv *qtjambi_current_environment()
     } else {
         Q_ASSERT(result == JNI_OK);
     }
+
+	// Avoid invalid JNI after JVM halt.
+	// JAVA 8 tends to return a JNI interface with a null function pointer table.
+	if (env == 0 || env->functions == 0) {
+		return 0;
+	}
+
     return env;
 }
 
