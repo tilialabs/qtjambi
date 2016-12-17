@@ -646,6 +646,8 @@ public class InitializeBuildTask extends AbstractInitializeTask {
                 generatorPreProcStageOneList.add("-D_MSC_VER=1600");
             } else if(Compiler.isCompiler(compilerString, Compiler.MSVC2012, Compiler.MSVC2012_64)) {
                 generatorPreProcStageOneList.add("-D_MSC_VER=1700");
+            } else if(Compiler.isCompiler(compilerString, Compiler.MSVC2015, Compiler.MSVC2015_64)) {
+                generatorPreProcStageOneList.add("-D_MSC_VER=1900");
             } else if(Compiler.isCompiler(compilerString, Compiler.GCC, Compiler.OldGCC, Compiler.MinGW, Compiler.MinGW_W64)) {
                 generatorPreProcStageOneList.add("-D__GNUC__" + gccVersionMajor);
             }
@@ -728,7 +730,7 @@ public class InitializeBuildTask extends AbstractInitializeTask {
             thisDebug = debugValue.booleanValue();
         String filename;
         if(prl)
-            filename = LibraryEntry.formatQtPrlName(name, thisDebug);
+            filename = LibraryEntry.formatQtPrlName(name, thisDebug, version);
         else
             filename = LibraryEntry.formatQtName(name, thisDebug, version);
         path.append(filename); // was LibraryEntry.formatQtJambiName

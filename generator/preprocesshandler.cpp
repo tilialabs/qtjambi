@@ -70,8 +70,13 @@ bool PreprocessHandler::handler() {
 // FIXME: Restore normal debug mode, showing DEFINE/UNDEF/INCLUDE(summary/verbose)
     QStringList includes = setIncludes();
 
-    foreach(QString include, includes)
+    foreach(QString include, includes) {
+#if QT_VERSION >= 0x050000
+        preprocess.push_include_path(toStdString(QDir::toNativeSeparators(include)));
+#else
         preprocess.push_include_path(toStdString(QDir::convertSeparators(include)));
+#endif
+    }
 // FIXME: Dump defines set
 
     QString currentDir = QDir::current().absolutePath();

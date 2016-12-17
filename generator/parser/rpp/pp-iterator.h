@@ -71,7 +71,7 @@ namespace rpp {
             explicit pp_output_iterator(std::string &__result):
                     _M_result(__result) {}
 
-#if 0
+#if 1
             // This fixes the MSVC2010 compiler compile issues with "*result++ = *first++;"
             //  however I am concerned for (this._M_result == __v._M_result) behavior, so
             //  this is implemented via operator type conversion, which forces the source
@@ -97,6 +97,7 @@ namespace rpp {
 
                 return *this;
             }
+            
             inline operator const std::string() {
                 const std::string c = std::string(_M_result);    // forces a copy
                 return c;

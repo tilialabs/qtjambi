@@ -37,7 +37,7 @@ package com.trolltech.tools.ant;
 
 import java.io.File;
 
-import org.apache.tools.ant.BuildException;  
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.PropertyHelper;
 
@@ -325,7 +325,7 @@ public class LibraryEntry extends Task {
             String tmpDebugSuffix = "_" + "debug";
             switch(OSInfo.os()) {
             case Windows:
-                return name + "d" + tmpVersionString + ".dll";
+                return "Qt" + versionString + name.substring(2) + "d" + ".dll";
             case MacOS:
                 return "lib" + name + tmpDebugSuffix + tmpDotVersionString + ".dylib";
             case Solaris:
@@ -336,7 +336,7 @@ public class LibraryEntry extends Task {
         } else {
             switch(OSInfo.os()) {
             case Windows:
-                return name + tmpVersionString + ".dll";
+                return "Qt" + versionString + name.substring(2) + ".dll";
             case MacOS:
                 return "lib" + name + tmpDotVersionString + ".dylib";
             case Solaris:
@@ -348,7 +348,7 @@ public class LibraryEntry extends Task {
         throw new BuildException("unhandled case...");
     }
 
-    public static String formatQtPrlName(String name, boolean debug) {
+    public static String formatQtPrlName(String name, boolean debug, String versionString) {
         // Windows: QtCore.prl QtCored.prl
         //   Linux: libQtCore.prl ??????
         //  MacOSX: libQtCore.prl libQtCore_debug.prl
@@ -356,7 +356,7 @@ public class LibraryEntry extends Task {
             String tmpDebugSuffix = "_" + "debug";
             switch(OSInfo.os()) {
             case Windows:
-                return name + "d" + ".prl";
+                return "Qt" + versionString + name.substring(2) + "d" + ".dll";
             case MacOS:
                 return "lib" + name + tmpDebugSuffix + ".prl";
             case Solaris:
@@ -367,7 +367,7 @@ public class LibraryEntry extends Task {
         } else {
             switch(OSInfo.os()) {
             case Windows:
-                return name + ".prl";
+                return "Qt" + versionString + name.substring(2) + ".dll";
             case MacOS:
                 return "lib" + name + ".prl";
             case Solaris:

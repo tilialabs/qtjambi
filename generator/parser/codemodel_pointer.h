@@ -106,6 +106,11 @@ template <class T> class CodeModelPointer
 #else // QT_VERSION < 0x040400
         inline CodeModelPointer(T *value = 0) : QAtomicPointer<T>(value) {}
 
+#if QT_VERSION >= 0x050000
+        inline T *operator->() { return data(); }
+        inline const T *operator->() const { return data(); }
+#endif
+
         inline CodeModelPointer &operator=(T *o) {
             QAtomicPointer<T>::operator=(o);
             return *this;

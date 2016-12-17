@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/qtjambi.iml" filepath="$PROJECT_DIR$/.idea/qtjambi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doc/src/doc.iml" filepath="$PROJECT_DIR$/doc/src/doc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/examples/generator/marble/marble.iml" filepath="$PROJECT_DIR$/examples/generator/marble/marble.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tilia-jambi.iml" filepath="$PROJECT_DIR$/tilia-jambi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generator/typesystem/typesystem.iml" filepath="$PROJECT_DIR$/generator/typesystem/typesystem.iml" />
     </modules>
   </component>
 </project>
