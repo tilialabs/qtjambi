@@ -40,12 +40,21 @@
 #include "qtjambitypemanager_p.h"
 #include "qtjambidestructorevent_p.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QDebug>
+#include <QtCore/QHash>
+#include <QtCore/QReadWriteLock>
+#include <QtCore/QThread>
+#include <QtCore/QWriteLocker>
+#include <QtCore/QCoreApplication>
+#else
 #include <QDebug>
 #include <QHash>
 #include <QReadWriteLock>
 #include <QThread>
 #include <QWriteLocker>
 #include <QCoreApplication>
+#endif
 
 #if defined(QTJAMBI_DEBUG_TOOLS)
 #  include "qtjambidebugtools_p.h"

@@ -65,14 +65,21 @@
 #include <QtGui/QActionEvent>
 #include <QtCore/QChildEvent> 
 #include <QtGui/QCloseEvent> 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore/QCustomEvent>
+#endif
 #include <QtGui/QDragLeaveEvent>
 #include <QtGui/QDropEvent>
 #include <QtCore/QDynamicPropertyChangeEvent>
 #include <QtGui/QFileOpenEvent>
 #include <QtGui/QFocusEvent>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtWidgets/QGestureEvent>
+#include <QtWidgets/QGraphicsSceneEvent>
+#else
 #include <QtGui/QGestureEvent>
 #include <QtGui/QGraphicsSceneEvent>
+#endif
 #include <QtGui/QHelpEvent>
 #include <QtGui/QHideEvent>
 #include <QtGui/QHoverEvent>

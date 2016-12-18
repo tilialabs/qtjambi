@@ -51,7 +51,11 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPolygon>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QDebug>
+#else
 #include <QDebug>
+#endif
 
 #if defined(QTJAMBI_DEBUG_TOOLS)
 #  include "qtjambidebugtools_p.h"

@@ -129,7 +129,11 @@ void QtDynamicMetaObjectPrivate::initialize(JNIEnv *env, jclass java_class, cons
 #endif
         }
         int string_data_len = env->GetArrayLength(string_data);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+		q->d.stringdata = new QByteArrayData();
+#else
         q->d.stringdata = new char[string_data_len];
+#endif
 
         int meta_data_len = env->GetArrayLength(meta_data);
         q->d.data = new uint[meta_data_len];
@@ -351,7 +355,11 @@ int QtDynamicMetaObject::originalSignalOrSlotSignature(JNIEnv *env, int _id, QSt
         _id = static_cast<const QtDynamicMetaObject *>(super_class)->originalSignalOrSlotSignature(env, _id, signature);
     } else {
         if (_id < super_class->methodCount()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+			QString qt_signature = QLatin1String(super_class->className()) + QLatin1String("::") + QString::fromLatin1(super_class->method(_id).methodSignature());
+#else
             QString qt_signature = QLatin1String(super_class->className()) + QLatin1String("::") + QString::fromLatin1(super_class->method(_id).signature());
+#endif
             *signature = getJavaName(qt_signature.toLatin1());
         }
         _id -= super_class->methodCount();

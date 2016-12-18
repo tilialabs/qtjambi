@@ -43,8 +43,13 @@
 #include <QtCore/QStringList>
 #include <QtCore/QMetaObject>
 #include <QtCore/QMetaProperty>
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+//#include <QtCore/5.7.0/QtCore/private/qabstractfileengine_p.h>
+//#include <QtCore/QAbstractFileEngineHandler>
+#else
 #include <QtCore/QAbstractFileEngine>
 #include <QtCore/QAbstractFileEngineHandler>
+#endif
 
 #ifdef QTJAMBI_SANITY_CHECK
 #include <QtCore/QObject>
@@ -55,9 +60,17 @@
 #include <pthread.h>
 #endif
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+static QtMessageHandler qt_message_handler;
+#else
 static QtMsgHandler qt_message_handler;
+#endif
 static bool qt_message_handler_installed;
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+void qtjambi_messagehandler_proxy(QtMsgType type, const QMessageLogContext &context, const QString &message);
+#else
 static void qtjambi_messagehandler_proxy(QtMsgType type, const char *message);
+#endif
 
 
 class QThreadData;
@@ -99,9 +112,13 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_setQObjec
         0               // return value new sender
     };
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+	fprintf(stderr, "%s:%d, TODO: QInternal::SetQObjectSender", __FILE__, __LINE__);
+#else
     if (!QInternal::callFunction(QInternal::SetQObjectSender, args)) {
         qWarning("QtJambiInternal::setQObjectSender: internal function call failed...");
     }
+#endif
 
     void **keep = new void*[2];
     keep[0] = args[3];
@@ -124,8 +141,12 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_resetQObj
         senders[1]
     };
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+	fprintf(stderr, "%s:%d, TODO: QInternal::ResetQObjectSender", __FILE__, __LINE__);
+#else
     if (!QInternal::callFunction(QInternal::ResetQObjectSender, args))
         qWarning("QtJambiInternal::resetQObjectSender: internal function call failed...");
+#endif
 
     delete [] senders;
 }
@@ -142,10 +163,14 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_sender)
         0
     };
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+	fprintf(stderr, "%s:%d, TODO: QInternal::GetQObjectSender", __FILE__, __LINE__);
+#else
     if (!QInternal::callFunction(QInternal::GetQObjectSender, args)) {
         qWarning("QtJambiInternal::sender: internal function call failed...");
         return 0;
     }
+#endif
 
     return qtjambi_from_qobject(env, (QObject *) args[1], "QObject", "com.trolltech.qt.core");
 }
@@ -189,7 +214,11 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_fetchSign
     return signal;
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QDebug>
+#else
 #include <QDebug>
+#endif
 extern "C" Q_DECL_EXPORT jboolean JNICALL
 QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_cppDisconnect)
 (JNIEnv *env,
@@ -357,7 +386,11 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_core_QMessageHandler_installMessag
 {
     if (!qt_message_handler_installed) {
         // returns old handler, which we save
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+		qt_message_handler = qInstallMessageHandler(qtjambi_messagehandler_proxy);
+#else
         qt_message_handler = qInstallMsgHandler(qtjambi_messagehandler_proxy);
+#endif
         qt_message_handler_installed = true;
     }
 }
@@ -368,7 +401,11 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_core_QMessageHandler_removeMessage
 {
     if (qt_message_handler_installed) {
         // restore original handler
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+		qInstallMessageHandler(qt_message_handler);
+#else
         qInstallMsgHandler(qt_message_handler);
+#endif
         qt_message_handler = 0;
         qt_message_handler_installed = false;
     }
@@ -444,6 +481,7 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiInternal_propertie
     return propertyList;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 class QClassPathFileEngineHandler: public QAbstractFileEngineHandler
 {
 public:
@@ -511,6 +549,7 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_fileengine_QClassPathFile
     }
     return false;
 }
+#endif
 
 extern "C" Q_DECL_EXPORT jboolean JNICALL
 QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiDebugTools_hasDebugTools)
@@ -627,22 +666,39 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_QtJambiRuntime_getDebugMa
 #endif
 }
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+static jboolean qtjambi_messagehandler_proxy_cached(JNIEnv *env, jclass cls, jmethodID mid, QtMsgType type, const QMessageLogContext &context, const QString &message)
+#else
 static jboolean qtjambi_messagehandler_proxy_cached(JNIEnv *env, jclass cls, jmethodID mid, QtMsgType type, const char *message)
+#endif
 {
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+	jstring str = qtjambi_from_qstring(env, message);
+#else
     jstring str = qtjambi_from_qstring(env, QString::fromLocal8Bit(message));
+#endif
 
     jboolean eaten = env->CallStaticBooleanMethod(cls, mid, (jint) type, str);
     qtjambi_exception_check(env);
 
-    if (eaten == JNI_FALSE && qt_message_handler)
-        qt_message_handler(type, message);
+	if (eaten == JNI_FALSE && qt_message_handler) {
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+		qt_message_handler(type, context, message);
+#else
+		qt_message_handler(type, message);
+#endif
+	}
 
     return eaten;
 }
 
 // FIXME: Cache the cls/mid, try to look them up when we install the handler, if found use
 //  an implementation of this method that uses cached values.  If not use this version.
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+void qtjambi_messagehandler_proxy(QtMsgType type, const QMessageLogContext &context, const QString &message)
+#else
 void qtjambi_messagehandler_proxy(QtMsgType type, const char *message)
+#endif
 {
     JNIEnv *env = qtjambi_current_environment();
     if(env) {
@@ -655,7 +711,11 @@ void qtjambi_messagehandler_proxy(QtMsgType type, const char *message)
             QTJAMBI_EXCEPTION_CHECK(env);
 
             if(mid) {
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+				qtjambi_messagehandler_proxy_cached(env, cls, mid, type, context, message);
+#else
                 qtjambi_messagehandler_proxy_cached(env, cls, mid, type, message);
+#endif
                 env->DeleteLocalRef(cls);
                 return;       // need to return here otherwise qt_message_handler is called twice
             }
@@ -663,8 +723,13 @@ void qtjambi_messagehandler_proxy(QtMsgType type, const char *message)
         }
     }
 
-    if (qt_message_handler)
-        qt_message_handler(type, message);
+	if (qt_message_handler) {
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+		qt_message_handler(type, context, message);
+#else
+		qt_message_handler(type, message);
+#endif
+	}
 }
 
 
@@ -683,7 +748,11 @@ QTJAMBI_FUNCTION_PREFIX(Java_com_trolltech_qt_internal_HelperFunctions_setAsMain
     }
 #endif
 
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+	fprintf(stderr, "%s:%d, TODO: QInternal::SetCurrentThreadToMainThread", __FILE__, __LINE__);
+#else
     QInternal::callFunction(QInternal::SetCurrentThreadToMainThread, 0);
+#endif
 }
 
 

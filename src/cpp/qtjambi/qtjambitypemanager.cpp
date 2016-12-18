@@ -38,7 +38,13 @@
 #include "qtjambi_core.h"
 #include "qtjambi_cache.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QThread>
+#include <QtCore/QIODevice>
+#include <QtCore/QDataStream>
+#else
 #include <QThread>
+#endif
 
 Q_GLOBAL_STATIC(QReadWriteLock, gStaticDataLock)
 
@@ -271,14 +277,20 @@ void *QtJambiTypeManager::constructInternal(const QString &internalTypeName,
     if (metaType != int(QMetaType::Void)
             && (metaType < QMetaType::User || QMetaType::isRegistered(metaType))) {
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+		returned = QMetaType::create(metaType, copy);
+#else
         returned = QMetaType::construct(metaType, copy);
+#endif
 
         // We need to initialize everything to zero by default
         if (copy == 0) {
             switch (metaType) {
                 case QMetaType::VoidStar:
                 case QMetaType::QObjectStar:
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                 case QMetaType::QWidgetStar:
+#endif
                     *(reinterpret_cast<void **>(returned)) = 0; break ;
                 case QMetaType::Long:
                     *(reinterpret_cast<long *>(returned)) = 0; break ;
@@ -305,6 +317,10 @@ void *QtJambiTypeManager::constructInternal(const QString &internalTypeName,
                 default:
                     if (QMetaType::type("qint64") == metaType)
                         *(reinterpret_cast<qint64 *>(returned)) = 0; break ;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+					if (qMetaTypeId<QWidget*>() == metaType)
+						*(reinterpret_cast<void **>(returned)) = 0; break;
+#endif
                     break ;
             };
         }
@@ -1286,7 +1302,11 @@ bool QtJambiTypeManager::convertInternalToExternal(const void *in, void **out,
                     int metaType = QMetaType::type(internalTypeName.toLatin1().constData());
 
                     if (metaType != QMetaType::Void) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+						void *object = QMetaType::create(metaType, in);
+#else
                         void *object = QMetaType::construct(metaType, in);
+#endif
                         success = qtjambi_construct_object(mEnvironment, javaObject, object, metaType);
                     }
                 } else {

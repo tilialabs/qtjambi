@@ -33,7 +33,13 @@
 **
 ****************************************************************************/
 
+#include <QtCore/qglobal.h>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QDebug>
+#else
 #include <QDebug>
+#endif
 
 #include "qtjambivariant_p.h"
 

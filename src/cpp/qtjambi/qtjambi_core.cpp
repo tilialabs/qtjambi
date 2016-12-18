@@ -44,7 +44,7 @@
 
 #include <common/qnativepointer.h>
 
-#include <qglobal.h>
+#include <QtCore/qglobal.h>
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QCoreApplication>
@@ -61,7 +61,11 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QMutex>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtWidgets/QStyleOption>
+#else
 #include <QtGui/QStyleOption>
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -86,10 +90,17 @@ static QString vm_location_override;
 
 // C-style wrapper for qInstallMsgHandler so the launcher launcher can look it up dynamically
 // without bothering with knowing the name mangling
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+extern "C" QTJAMBI_EXPORT QtMessageHandler wrap_qInstallMsgHandler(QtMessageHandler handler)
+{
+    return qInstallMessageHandler(handler);
+}
+#else
 extern "C" QTJAMBI_EXPORT QtMsgHandler wrap_qInstallMsgHandler(QtMsgHandler handler)
 {
-    return qInstallMsgHandler(handler);
+	return qInstallMsgHandler(handler);
 }
+#endif
 
 
 // accessor for protected function receiver
@@ -383,7 +394,11 @@ jobject qtjambi_from_qvariant(JNIEnv *env, const QVariant &qt_variant)
 
     // generic java object
     if (qt_variant.userType() == type) {
-        JObjectWrapper wrapper = qVariantValue<JObjectWrapper>(qt_variant);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+        JObjectWrapper wrapper = qt_variant.value<JObjectWrapper>();
+#else
+		JObjectWrapper wrapper = qVariantValue<JObjectWrapper>(qt_variant);
+#endif
         return env->NewLocalRef(wrapper.object);
     } else {
         QString qtType = QLatin1String(qt_variant.typeName());
@@ -564,7 +579,11 @@ jobject qtjambi_from_object(JNIEnv *env, const void *qt_object, const char *clas
         // Otherwise we have to create it
         copy = const_cast<void *>(qt_object);
     } else {
-        copy = QMetaType::construct(metaType, qt_object);
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+		copy = QMetaType::create(metaType, qt_object);
+#else
+		copy = QMetaType::construct(metaType, qt_object);
+#endif
         if (copy == 0)
             return 0;
     }
@@ -672,7 +691,11 @@ static void qtjambi_setup_connections(JNIEnv *, QtJambiLink *link)
     for (int i=0; i<mo->methodCount(); ++i) {
         QMetaMethod m = mo->method(i);
         if (m.methodType() == QMetaMethod::Signal) {
-            const char *signature = m.signature();
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+            const char *signature = m.methodSignature();
+#else
+			const char *signature = m.signature();
+#endif
             QByteArray ba = QByteArray(signature);
             ba = QByteArray("2") + ba;
 
@@ -875,7 +898,11 @@ QtJambiLink *qtjambi_construct_qobject(JNIEnv *env, jobject java_object, QObject
             jobject weak_global_ref = env->NewWeakGlobalRef(java_thread);
             Q_ASSERT(REFTYPE_WEAKGLOBAL(env, weak_global_ref));
             qtjambi_thread_table()->insert(qt_thread, weak_global_ref);
+#if QT_VERSION <  QT_VERSION_CHECK(5, 0, 0)
             QInternal::callFunction(QInternal::RefAdoptedThread, (void **) (void *) (&qt_thread));
+#else
+			fprintf(stderr, "TODO: QInternal::RefAdoptedThread");
+#endif
         }
     }
 
@@ -1457,7 +1484,11 @@ QThread *qtjambi_to_thread(JNIEnv *env, jobject thread)
     // No thread found, need to create a "fake" thread and insert it
     // into the thread table for later mapping between Qt / Java.
     // This thread object is already ref'ed by Qt.
+#if QT_VERSION <  QT_VERSION_CHECK(5, 0, 0)
     QInternal::callFunction(QInternal::CreateThreadForAdoption, (void **) (void *) &qt_thread);
+#else
+	fprintf(stderr, "TODO: QInternal::CreateThreadForAdoption");
+#endif
     Q_ASSERT_X(qt_thread, "qtjambi_to_thread", "Thread adoption failed, have to abort...");
 
     ThreadTable *table = qtjambi_thread_table();
@@ -1499,7 +1530,11 @@ int qtjambi_release_threads(JNIEnv *env)
             it = table->erase(it);
 //             locker.unlock();
             Q_ASSERT(thread);
+#if QT_VERSION <  QT_VERSION_CHECK(5, 0, 0)
             QInternal::callFunction(QInternal::DerefAdoptedThread, (void **) (void *) &thread);
+#else
+			fprintf(stderr, "TODO: QInternal::DerefAdoptedThread");
+#endif
 //             locker.relock();
         } else {
             // thread still exists
@@ -2552,9 +2587,13 @@ static bool qtjambi_event_notify(void **data)
 
 void qtjambi_register_callbacks()
 {
+#if QT_VERSION <  QT_VERSION_CHECK(5, 0, 0)
     QInternal::registerCallback(QInternal::ConnectCallback,    qtjambi_connect_callback);
     QInternal::registerCallback(QInternal::DisconnectCallback, qtjambi_disconnect_callback);
     QInternal::registerCallback(QInternal::AdoptCurrentThread, qtjambi_adopt_current_thread);
+#else
+	fprintf(stderr, "%s:%d: TODO: Register QInternal Callbacks", __FILE__, __LINE__);
+#endif
 
 #if QT_VERSION >= 0x040300
     QInternal::registerCallback(QInternal::EventNotifyCallback, qtjambi_event_notify);
@@ -2568,6 +2607,9 @@ void qtjambi_register_callbacks()
 void qtjambi_unregister_callbacks() 
 {
     {
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 0, 0)
+		QMetaType::unregisterType(qMetaTypeId<JObjectWrapper>());
+#else
         // unregisterType() will clear pointer returned by typeName() causing an
         // invalid memory read access during the unregisterType() call so we must
         // copy the string value to a local.
@@ -2579,15 +2621,20 @@ void qtjambi_unregister_callbacks()
         QMetaType::unregisterType(typenamebuf);
 
         delete[] typenamebuf;
+#endif
     }
 
 #if QT_VERSION >= 0x040300
     QInternal::unregisterCallback(QInternal::EventNotifyCallback, qtjambi_event_notify);
 #endif
 
+#if QT_VERSION <  QT_VERSION_CHECK(5, 0, 0)
     QInternal::unregisterCallback(QInternal::AdoptCurrentThread, qtjambi_adopt_current_thread);
     QInternal::unregisterCallback(QInternal::DisconnectCallback, qtjambi_disconnect_callback);
     QInternal::unregisterCallback(QInternal::ConnectCallback,    qtjambi_connect_callback);
+#else
+	fprintf(stderr, "%s:%d: TODO: UnRegister QInternal Callbacks", __FILE__, __LINE__);
+#endif
 }
 
 
