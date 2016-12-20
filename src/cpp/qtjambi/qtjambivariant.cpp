@@ -85,9 +85,13 @@ static bool isNull(const QVariant::Private *d)
     return false;
 }
 
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+static bool convert(const QVariant::Private *d, int t,
+	void *result, bool *ok)
+#else
 static bool convert(const QVariant::Private *d, QVariant::Type t,
                  void *result, bool *ok)
+#endif
 {
     const JObjectWrapper *wrapper = cast_to_object_wrapper(d);
 

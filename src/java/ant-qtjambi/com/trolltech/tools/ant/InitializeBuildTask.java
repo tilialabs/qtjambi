@@ -1640,6 +1640,7 @@ public class InitializeBuildTask extends AbstractInitializeTask {
         detectQtDsoExistAndSetProperty(Constants.SQL, "QtSql", String.valueOf(qtMajorVersion), "sql");
         detectQtDsoExistAndSetProperty(Constants.SVG, "QtSvg", String.valueOf(qtMajorVersion), "svg");
         detectQtDsoExistAndSetProperty(Constants.TEST, "QtTest", String.valueOf(qtMajorVersion), "qtestlib");
+        detectQtDsoExistAndSetProperty(Constants.WIDGETS, "QtWidgets", String.valueOf(qtMajorVersion), "widgets");
 
         String qtDetectWebkit = detectQtDsoExistAndSetProperty(Constants.WEBKIT, "QtWebKit", String.valueOf(qtMajorVersion), "webkit");
         // Not sure why this is a problem "ldd libQtWebKit.so.4.7.4" has no dependency on libphonon for me,

@@ -42,6 +42,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
+#include <QtWidgets/QWidget>
 #else
 #include <QThread>
 #endif

@@ -62,7 +62,9 @@ class QtJambiVariant: private QVariant
 
     static int registerHandler()
         {
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
             lastHandler = QVariant::handler;
+#endif
             setHandler(&handler);
             return 1;
         }
@@ -75,7 +77,16 @@ class QtJambiVariant: private QVariant
         }
 
  private:
-    static const QVariant::Handler handler;
+	 static const QVariant::Handler handler;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	 static void setHandler(const Handler *handler) {
+	 }
+
+	 static const Handler *getHandler() {
+		 return 0;
+	 }
+#else
 
     static void setHandler(const Handler *handler) {
         QVariant::handler = handler;
@@ -84,6 +95,7 @@ class QtJambiVariant: private QVariant
     static const Handler *getHandler() {
         return QVariant::handler;
     }
+#endif
 
     static const QVariant::Handler *lastHandler;
 
