@@ -36,7 +36,14 @@
 // QT_NO_STL removes extra generator parser noise (that it doesn't understand anyway)
 #define QT_NO_STL
 
+// this is somehow not getting set properly through QtCore includes
+//#if defined(WIN32) || defined(WIN64)
+#define Q_OS_WIN
+//#endif
+
 #include <QtCore/QtCore>
+#include <QtCore/QWinEventNotifier>
+
 #include <QtGui/QtGui>
 #include <QtNetwork/QtNetwork>
 #ifndef QT_NO_SQL

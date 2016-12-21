@@ -140,6 +140,7 @@ public abstract class Constants {
     public static final String XMLPATTERNS        = "qtjambi.xmlpatterns";
     public static final String QTCONFIG           = "qtjambi.qtconfig";
     public static final String WIDGETS            = "qtjambi.widgets";
+    public static final String CONCURRENT         = "qtjambi.concurrent";
 
     public static final String PLUGINS_ACCESSIBLE_QTACCESSIBLEWIDGETS  = "qtjambi.plugins.accessible.qtaccessiblewidgets";
 

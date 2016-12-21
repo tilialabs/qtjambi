@@ -7,4 +7,4 @@ HEADERS += qtjambiconcurrent.h qtjambiconcurrent_p.h qtjambi_core_qhashes.h
 SOURCES += qtjambiconcurrent.cpp
 
 # libQtCore.so.4.7.4 is not dependant any other libQt*.so.* (ensures removal of 'Qt -= gui')
-QT = core
+QT = core concurrent

@@ -41,7 +41,7 @@
 #include <QtCore/qglobal.h>
 
 //TODO: rewrite
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #  if !defined(QTJAMBI_EXPORT) && !defined(QT_QTJAMBI_IMPORT)
 #    define QTJAMBI_EXPORT
 #  elif defined(QT_QTJAMBI_IMPORT)

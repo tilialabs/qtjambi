@@ -42,6 +42,10 @@
 
 #ifndef QT_NO_CONCURRENT
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtConcurrent/QtConcurrent>
+#endif
+
 FutureSequenceCleanUp::FutureSequenceCleanUp(QList<JObjectWrapper> *sequence)
         : m_sequence(sequence)
 {
