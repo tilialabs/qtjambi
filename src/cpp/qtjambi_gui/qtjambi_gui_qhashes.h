@@ -58,6 +58,7 @@ inline int qHash(const QPalette &palette)
     return hashCode;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 inline int qHash(const QFont &font)
 {
     int hashCode = font.pixelSize();
@@ -86,6 +87,7 @@ inline int qHash(const QMatrix &matrix)
     hashCode = hashCode * 31 + int(matrix.dy());
     return hashCode;
 }
+#endif
 
 inline int qHash(const QImage &image)
 {
@@ -103,6 +105,7 @@ inline int qHash(const QPen &pen)
     return hashCode;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 inline int qHash(const QTransform &transform)
 {
     int hashCode = int(transform.m11());
@@ -119,6 +122,7 @@ inline int qHash(const QTransform &transform)
 
     return hashCode;
 }
+#endif
 
 inline int qHash(const QPolygonF &polygon)
 {

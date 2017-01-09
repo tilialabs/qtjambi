@@ -237,6 +237,7 @@ class Lexer {
         void scanKeyword13();
         void scanKeyword14();
         void scanKeyword16();
+		void scanKeyword17();
 
         // operators
         void scan_not();

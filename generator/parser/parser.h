@@ -176,6 +176,7 @@ class Parser {
         bool parseQ_PROPERTY(DeclarationAST *&node);
         bool parseQ_ENUMS(DeclarationAST *&node);
 
+		bool skipMacroFunction();
         bool skipUntil(int token);
         bool skipUntilDeclaration();
         bool skipUntilStatement();

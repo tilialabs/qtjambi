@@ -423,6 +423,9 @@ bool Parser::parseDeclaration(DeclarationAST *&node) {
         case Token_Q_ENUMS:
             return parseQ_ENUMS(node);
 
+		case Token_IgnoreMacroFunction:
+			return skipMacroFunction();
+
         case Token_template:
         case Token_export:
             return parseTemplateDeclaration(node);
@@ -1746,7 +1749,9 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node) {
         return true;
     } else if (parseQ_ENUMS(node)) {
         return true;
-    }
+    } else if (skipMacroFunction()) {
+		return true;
+	}
 
     token_stream.rewind((int) start);
 
@@ -3962,6 +3967,26 @@ bool Parser::parseQ_PROPERTY(DeclarationAST *&node) {
     token_stream.nextToken();
 
     return true;
+}
+
+bool Parser::skipMacroFunction() {
+	if (token_stream.lookAhead() != Token_IgnoreMacroFunction)
+		return false;
+
+	if (token_stream.lookAhead(1) != '(')
+		return false;
+
+	token_stream.nextToken();
+	token_stream.nextToken();
+
+	std::size_t firstToken = token_stream.cursor();
+	while (token_stream.lookAhead() != ')') {
+		token_stream.nextToken();
+	}
+
+	token_stream.nextToken();
+
+	return true;
 }
 
 bool Parser::block_errors(bool block) {

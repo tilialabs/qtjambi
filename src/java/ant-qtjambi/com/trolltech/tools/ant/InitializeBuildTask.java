@@ -1624,7 +1624,7 @@ public class InitializeBuildTask extends AbstractInitializeTask {
     private void solveQtLibraries() {
         detectQtDsoExistAndSetProperty(Constants.CLUCENE, "QtCLucene", String.valueOf(qtMajorVersion), null);
         detectQtDsoExistAndSetProperty(Constants.CORE, "QtCore", String.valueOf(qtMajorVersion), null);
-        detectQtDsoExistAndSetProperty(Constants.DBUS, "QtDBus", String.valueOf(qtMajorVersion), "dbus");
+        //detectQtDsoExistAndSetProperty(Constants.DBUS, "QtDBus", String.valueOf(qtMajorVersion), "dbus");
         detectQtDsoExistAndSetProperty(Constants.DECLARATIVE, "QtDeclarative", String.valueOf(qtMajorVersion), "declarative");
         detectQtDsoExistAndSetProperty(Constants.DESIGNER, "QtDesigner", String.valueOf(qtMajorVersion), "designer");
         detectQtDsoExistAndSetProperty(Constants.DESIGNERCOMPONENTS, "QtDesignerComponents", String.valueOf(qtMajorVersion), null);
@@ -1632,14 +1632,14 @@ public class InitializeBuildTask extends AbstractInitializeTask {
         detectQtDsoExistAndSetProperty(Constants.HELP, "QtHelp", String.valueOf(qtMajorVersion), "help");
         detectQtDsoExistAndSetProperty(Constants.MULTIMEDIA, "QtMultimedia", String.valueOf(qtMajorVersion), "multimedia");
         detectQtDsoExistAndSetProperty(Constants.NETWORK, "QtNetwork", String.valueOf(qtMajorVersion), "network");
-        detectQtDsoExistAndSetProperty(Constants.OPENGL, "QtOpenGL", String.valueOf(qtMajorVersion), "opengl");
+        //detectQtDsoExistAndSetProperty(Constants.OPENGL, "QtOpenGL", String.valueOf(qtMajorVersion), "opengl");
         String phononLibDir = AntUtil.getPropertyAsString(propertyHelper, Constants.QTJAMBI_PHONON_LIBDIR);  // maybe null or valid
         String qtDetectPhonon = detectQtDsoExistAndSetProperty(Constants.PHONON, "phonon", String.valueOf(qtMajorVersion), "phonon", phononLibDir);
         detectQtDsoExistAndSetProperty(Constants.SCRIPT, "QtScript", String.valueOf(qtMajorVersion), "script");
         detectQtDsoExistAndSetProperty(Constants.SCRIPTTOOLS, "QtScriptTools", String.valueOf(qtMajorVersion), "scripttools");
-        detectQtDsoExistAndSetProperty(Constants.SQL, "QtSql", String.valueOf(qtMajorVersion), "sql");
+        //detectQtDsoExistAndSetProperty(Constants.SQL, "QtSql", String.valueOf(qtMajorVersion), "sql");
         detectQtDsoExistAndSetProperty(Constants.SVG, "QtSvg", String.valueOf(qtMajorVersion), "svg");
-        detectQtDsoExistAndSetProperty(Constants.TEST, "QtTest", String.valueOf(qtMajorVersion), "qtestlib");
+        //detectQtDsoExistAndSetProperty(Constants.TEST, "QtTest", String.valueOf(qtMajorVersion), "qtestlib");
         detectQtDsoExistAndSetProperty(Constants.WIDGETS, "QtWidgets", String.valueOf(qtMajorVersion), "widgets");
         detectQtDsoExistAndSetProperty(Constants.CONCURRENT, "QtConcurrent", String.valueOf(qtMajorVersion), "concurrent");
 

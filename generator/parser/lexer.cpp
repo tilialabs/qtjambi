@@ -51,7 +51,7 @@ scan_fun_ptr Lexer::s_scan_keyword_table[] = {
     &Lexer::scanKeyword10, &Lexer::scanKeyword11,
     &Lexer::scanKeyword12, &Lexer::scanKeyword13,
     &Lexer::scanKeyword14, &Lexer::scanKeyword0,
-    &Lexer::scanKeyword16
+    &Lexer::scanKeyword16, &Lexer::scanKeyword17
 };
 
 void LocationManager::extract_line(int offset, int *line, QString *filename) const {
@@ -320,7 +320,7 @@ void Lexer::scan_identifier_or_keyword() {
 
     int n = skip - cursor;
     Token *current_token = &token_stream[(int) index];
-    (this->*s_scan_keyword_table[n < 17 ? n : 0])();
+    (this->*s_scan_keyword_table[n < 18 ? n : 0])();
 
     if (current_token->kind == Token_identifier) {
         current_token->extra.symbol =
@@ -1218,6 +1218,16 @@ void Lexer::scanKeyword6() {
             }
             break;
 
+		case 'Q':
+			if (*(cursor + 1) == '_' &&
+				*(cursor + 2) == 'E' &&
+				*(cursor + 3) == 'N' &&
+				*(cursor + 4) == 'U' &&
+				*(cursor + 5) == 'M') {
+				token_stream[(int)index++].kind = Token_Q_ENUMS;
+				return;
+			}
+			break;
     }
     token_stream[(int) index++].kind = Token_identifier;
 }
@@ -1647,6 +1657,34 @@ void Lexer::scanKeyword16() {
     }
 
     token_stream[(int) index++].kind = Token_identifier;
+}
+
+void Lexer::scanKeyword17() {
+	switch (*cursor) {
+	case 'Q': // QT_OPENGL_DECLARE
+		if (*(cursor + 1) == 'T' &&
+			*(cursor + 2) == '_' &&
+			*(cursor + 3) == 'O' &&
+			*(cursor + 4) == 'P' &&
+			*(cursor + 5) == 'E' &&
+			*(cursor + 6) == 'N' &&
+			*(cursor + 7) == 'G' &&
+			*(cursor + 8) == 'L' &&
+			*(cursor + 9) == '_' &&
+			*(cursor + 10) == 'D' &&
+			*(cursor + 11) == 'E' &&
+			*(cursor + 12) == 'C' &&
+			*(cursor + 13) == 'L' &&
+			*(cursor + 14) == 'A' &&
+			*(cursor + 15) == 'R' &&
+			*(cursor + 16) == 'E') {
+			token_stream[(int)index++].kind = Token_IgnoreMacroFunction;
+			return;
+		}
+		break;
+	}
+
+	token_stream[(int)index++].kind = Token_identifier;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

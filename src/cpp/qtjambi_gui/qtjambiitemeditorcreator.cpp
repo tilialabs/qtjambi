@@ -33,8 +33,8 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QItemEditorCreator>
-#include <QtGui/QWidget>
+#include <QtWidgets/QItemEditorCreator>
+#include <QtWidgets/QWidget>
 
 #include <qtjambi/qtjambilink.h>
 #include <qtjambi/qtjambi_core.h>

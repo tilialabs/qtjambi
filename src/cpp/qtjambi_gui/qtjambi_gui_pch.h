@@ -34,5 +34,5 @@
 ****************************************************************************/
 
 #include <qtjambi/qtjambi_core.h>
-#include <qwidget.h>
+//#include <qwidget.h>
 #include <qpainter.h>

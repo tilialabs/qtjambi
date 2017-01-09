@@ -532,13 +532,22 @@
 
     <value-type name="QPixmapCache::Key" />
     <value-type name="QTileRules" />
-    <value-type name="QVector2D" />
-    <value-type name="QVector3D" />
-    <value-type name="QVector4D" />
+    <value-type name="QVector2D">
+        <modify-function signature="operator[](int)const" remove="all"/>
+        <modify-function signature="toVector3D()const" remove="all"/>
+        <modify-function signature="toVector4D()const" remove="all"/>
+    </value-type>
+    <value-type name="QVector3D">
+        <modify-function signature="operator[](int)const" remove="all"/>
+    </value-type>
+    <value-type name="QVector4D">
+        <modify-function signature="operator[](int)const" remove="all"/>
+    </value-type>
     <value-type name="QTouchEvent::TouchPoint" />
     <value-type name="QPainter::PixmapFragment" />
 
     <value-type name="QTransform">
+    <modify-function signature="QTransform(QTransform)" remove="all"/>
         <modify-function signature="operator=(QTransform)" remove="all"/>
         <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
         <modify-function signature="map(%CPP_QREAL_type,%CPP_QREAL_type,%CPP_QREAL_type*,%CPP_QREAL_type*)const" remove="all"/>
@@ -621,6 +630,7 @@
     </value-type>
     <value-type name="QBitmap" delete-in-main-thread="yes">
         <modify-function signature="operator=(const QPixmap &amp;)" remove="all"/>
+        <modify-function signature="operator=(const QBitmap &amp;)" remove="all"/>
         <modify-function signature="QBitmap(QString,const char*)" access="private">
             <modify-argument index="2"> <remove-default-expression/> </modify-argument>
         </modify-function>
@@ -709,6 +719,7 @@
     </value-type>
 
     <value-type name="QRegion" expense-limit="4096">
+        <modify-function signature="QRegion(QRegion)" remove="all"/>
         <modify-function signature="operator=(QRegion)" remove="all"/>
         <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
         <modify-function signature="operator+=(QRegion)" remove="all"/>
@@ -804,6 +815,7 @@
 
     <value-type name="QTextFrame::iterator" delete-in-main-thread="yes">
         <include file-name="QTextFrame" location="global"/>
+        <modify-function signature="iterator(QTextFrame::iterator)" remove="all"/>
         <modify-function signature="operator++(int)" remove="all"/>
         <modify-function signature="operator--(int)" remove="all"/>
         <modify-function signature="operator=(QTextFrame::iterator)" remove="all"/>
@@ -909,6 +921,7 @@
     <value-type name="QMatrix2x2">
     </value-type>
     <value-type name="QMatrix">
+        <modify-function signature="QMatrix(QMatrix)" remove="all"/>
         <extra-includes>
             <include file-name="QPainterPath" location="global"/>
         </extra-includes>
@@ -1331,7 +1344,9 @@
     </value-type>
 
     <interface-type name="QLayoutItem"/>
-    <interface-type name="QPaintDevice"/>
+    <interface-type name="QPaintDevice">
+        <modify-function signature="devicePixelRatioFScale()" remove="all" />
+    </interface-type>
 
     <interface-type name="QGraphicsItem" delete-in-main-thread="yes">
         <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
@@ -1487,6 +1502,8 @@
         </modify-function>
 
     </object-type>
+    
+    <!-- Qt 5.0.0 needs refactoring
     <object-type name="QAccessible">
         <modify-function signature="initialize()" remove="all"/>
         <modify-function signature="cleanup()" remove="all"/>
@@ -1529,6 +1546,8 @@
     <object-type name="QAccessibleObjectEx"/>
     <object-type name="QAccessibleWidget"/>
     <object-type name="QAccessibleWidgetEx"/>
+    -->
+    
     <object-type name="QActionGroup" />
     <object-type name="QCDEStyle">
         <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
@@ -1811,7 +1830,9 @@
             </modify-argument>
         </modify-function>
     </object-type>
-    <object-type name="QItemSelectionModel"/>
+    <object-type name="QItemSelectionModel">
+        <modify-function signature="model() const" remove="all"/>
+    </object-type>
     <object-type name="QTreeModel"/>
     <object-type name="QListView"/>
     <object-type name="QColumnView">
@@ -5279,7 +5300,9 @@
     <interface-type name="QPictureFormatInterface" java-name="QAbstractPictureFormat" />
 
     <object-type name="QIconEnginePluginV2"/>
+    <!-- Qt 5.0.0 needs refactoring
     <object-type name="QAccessiblePlugin"/>
+    -->
     <object-type name="QImageIOPlugin" />
     <object-type name="QInputContextPlugin" />
     <object-type name="QPictureFormatPlugin" />

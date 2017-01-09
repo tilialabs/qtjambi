@@ -21,7 +21,7 @@ include ($$QTJAMBI_CPP/com_trolltech_qt_gui/com_trolltech_qt_gui.pri)
 INCLUDEPATH += $$PWD/../qtjambi_core
 
 # libQtGui.so.4.7.4 is only dependant on libQtCore.so.4
-QT = core gui
+QT = core gui widgets
 
 win32:CONFIG += precompile_header
 PRECOMPILED_HEADER = qtjambi_gui_pch.h

@@ -69,6 +69,7 @@ inline int qHash(const QPoint &point)
     return hashCode;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 inline int qHash(const QDate &date)
 {
     return date.toJulianDay();
@@ -89,6 +90,7 @@ inline int qHash(const QDateTime &dateTime)
     hashCode = hashCode * 31 + qHash(dateTime.time());
     return hashCode;
 }
+#endif
 
 inline int qHash(const QLineF &line)
 {
