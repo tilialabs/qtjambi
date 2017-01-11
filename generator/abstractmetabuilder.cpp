@@ -212,7 +212,7 @@ AbstractMetaClass *AbstractMetaBuilder::argumentToClass(ArgumentModelItem argume
  */
 void AbstractMetaBuilder::registerHashFunction(FunctionModelItem function_item) {
     ArgumentList arguments = function_item->arguments();
-    if (arguments.size() == 1) {
+    if (arguments.size() == 1 || arguments.size() == 2) {
         if (AbstractMetaClass *cls = argumentToClass(arguments.at(0), "AbstractMetaBuilder::registerHashFunction")) {
             QFileInfo info(function_item->fileName());
             cls->typeEntry()->addExtraInclude(Include(Include::IncludePath, info.fileName()));

@@ -34,6 +34,7 @@
 ****************************************************************************/
 
 #define QT_JAMBI_GENERATOR
+#define QT_JAMBI_BUILD
 
 // QT_NO_STL removes extra generator parser noise (that it doesn't understand anyway)
 #define QT_NO_STL

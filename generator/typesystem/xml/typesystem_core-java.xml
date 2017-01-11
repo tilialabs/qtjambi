@@ -882,7 +882,7 @@
         </insert-template>
     </inject-code>
 
-    <modify-function signature="setNum(long long,int)">
+    <modify-function signature="setNum(__int64,int)">
         <access modifier="private"/>
         <rename to="setNum_private"/>
         <modify-argument index="2">
