@@ -2136,7 +2136,7 @@
 
 
         <modify-function signature="layoutSpacing(QSizePolicy::ControlType,QSizePolicy::ControlType,Qt::Orientation,const QStyleOption*,const QWidget*)const">
-            <access modifier="private"/>
+            <access modifier="public"/>
             <modify-argument index="4">
                 <remove-default-expression/>
             </modify-argument>

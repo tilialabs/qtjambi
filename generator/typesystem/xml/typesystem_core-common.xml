@@ -488,10 +488,10 @@
         <reject-enum-value name="ApplicationDeactivated"/>
     </enum-type>
     <enum-type name="QEventLoop::ProcessEventsFlag" flags="QEventLoop::ProcessEventsFlags"/>
-    <enum-type name="QFile::FileError"/>
-    <enum-type name="QFile::FileHandleFlag" flags="QFile::FileHandleFlags"/><!-- since 4.8 -->
-    <enum-type name="QFile::MemoryMapFlags" />
-    <enum-type name="QFile::Permission" flags="QFile::Permissions"/>
+    <enum-type name="QFileDevice::FileError"/>
+    <enum-type name="QFileDevice::FileHandleFlag" flags="QFileDevice::FileHandleFlags"/><!-- since 4.8 -->
+    <enum-type name="QFileDevice::MemoryMapFlags" />
+    <enum-type name="QFileDevice::Permission" flags="QFileDevice::Permissions"/>
     <enum-type name="QIODevice::OpenModeFlag" flags="QIODevice::OpenMode"/>
     <enum-type name="QLibraryInfo::LibraryLocation"/>
     <enum-type name="QLocale::CurrencySymbolFormat"/><!-- since 4.8 -->
